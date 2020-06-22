@@ -11,6 +11,7 @@
   "dependencies": {
     "twit": "^2.2.11",
     "http-signature": "^1.3.1",
-    "jssha": "^2.3.1"
+    "jssha": "^2.3.1",
+    "@fnproject/fdk": ">=0.0.18"
   }
 }
