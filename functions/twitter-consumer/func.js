@@ -1,8 +1,8 @@
 const fdk=require('@fnproject/fdk');
 const tweetConsumer=require('./index')
 fdk.handle(function(input){
-  
-  const x = tweetConsumer.produceTweetReport( input.hashtag, input.minutes)
+  console.log(`TweetConsumer invoked with ${JSON.stringify(input)}`)
+  const x = tweetConsumer.produceTweetReport( input.hashtag, input.minutes?input.minutes:5)
   return x
 })
 
