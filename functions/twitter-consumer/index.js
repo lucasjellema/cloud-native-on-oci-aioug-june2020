@@ -18,7 +18,9 @@ const queryTweets = async (hashtag, howFarBack) => {
         let today = new Date().toISOString()
         let fromDate = today.substr(0, 10) //yyyy-mm-dd
         const referenceTimestamp = new Date(new Date().getTime() - howFarBack * 60000)
+
         const referenceTimestampString = referenceTimestamp.toISOString()
+        console.log(`Only tweets created after ${referenceTimestampString}`)
         T.get('search/tweets', { q: `#${hashtag} since:${fromDate}`, count: 50 }, function (err, data, response) {
             if (err) return reject(err)
             const tweets = []
@@ -51,7 +53,7 @@ const produceTweetReport = async function (hashtag, minutes) {
 
     // the padEnd is added because it seems bytes are getting lost when creating the file object; spaces are added that can get lost without affecting the JSON content 
     let data = await fileWriter.fileWriter(bucketName, filename, JSON.stringify({"tweets": tweets})+" ".padEnd(550))
-    console.log(`response from file writer: ${JSON.stringify(data)}`)
+   // console.log(`response from file writer: ${JSON.stringify(data)}`)
     // to test the result of what we just did: read the file that was created
     const file =await  fileReader.fileReader(bucketName, filename) 
     const tweetsFile = JSON.parse(file)
@@ -81,9 +83,10 @@ const run = async function () {
             log(`No minutes is defined; use last ${defaultPeriod} minutes as default`)
         }
         const result = await produceTweetReport(hashtag, minutes)
-        console.log(`Result: ${JSON.stringify(result)}`)
+        console.log(`Result from produceTweetReport: ${JSON.stringify(result)}`)
 
     } else {
+        
         const tweets = await queryTweets("aioug", 400)
         console.log(tweets)
     }

@@ -1,10 +1,11 @@
 const fdk=require('@fnproject/fdk');
 const tweetConsumer=require('./index')
-fdk.handle(function(input, ctx){
+fdk.handle(async function(input, ctx){
   console.log(`TweetConsumer invoked with ${JSON.stringify(input)}`)
   console.log(`TweetConsumer invoked with ctr ${JSON.stringify(ctx)}`)
   
-  const x = tweetConsumer.produceTweetReport( input.hashtag, input.minutes?input.minutes:5)
+  const x = await tweetConsumer.produceTweetReport( input.hashtag?input.hashtag:"AIOUG", input.minutes?input.minutes:5)
+  
   return x
 })
 
