@@ -9,6 +9,7 @@ fdk.handle(async function(input, ctx){
   
   const x = await tweetConsumer.produceTweetReport( input.hashtag?input.hashtag:"AIOUG", input.minutes?input.minutes:5)
   x.url= ctx.headers["Fn-Http-Request-Url"]
+  x.queryData = queryData
   return x
 })
 
