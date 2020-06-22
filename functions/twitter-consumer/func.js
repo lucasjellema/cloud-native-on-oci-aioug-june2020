@@ -5,7 +5,7 @@ fdk.handle(async function(input, ctx){
   console.log(`TweetConsumer invoked with ctr ${JSON.stringify(ctx["Fn-Http-Request-Url"])}`)
   
   const x = await tweetConsumer.produceTweetReport( input.hashtag?input.hashtag:"AIOUG", input.minutes?input.minutes:5)
-  
+  x.url= ctx["Fn-Http-Request-Url"]
   return x
 })
 
