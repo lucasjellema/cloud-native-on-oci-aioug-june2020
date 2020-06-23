@@ -1,10 +1,11 @@
 const fileReader = require('./fileReader')
 const NoSQLClient = require('oracle-nosqldb').NoSQLClient;
+const nosqlClient = new NoSQLClient('config.json');
+
 const https = require('https');
 const os = require('os');
 const fs = require('fs');
 const ociRequestor = require('./ociRequestor');
-const client = new NoSQLClient('config.json');
 const bucketName = "tweet-reports"
 const tableName = 'TWEETS_TABLE';
 const configs = require('./oci-configuration').configs;
@@ -77,10 +78,10 @@ const persistTweetsInNOSQL = async function (tweetsReport) {
         tweet = tweetsReport.tweets[i]
         try {
             // insert record into NoSQL Database table 
-            let result = await client.put(tableName, {
-                id: tweet.id, text: tweet.tweetText,
-                author: tweet.author, tweet_timestamp: tweet.creationTime
-                , language: tweet.lang, hashtags: tweet.hashtags
+            let result = await nosqlClient.put(tableName, {
+                "id": tweet.id, "text": tweet.tweetText,
+                "author": tweet.author, "tweet_timestamp": tweet.creationTime
+                , "language": tweet.lang, "hashtags": tweet.hashtags
             });
         } catch (e) {
             console.log(`Failed to create NoSQL Record ${JSON.stringify(e)}`)

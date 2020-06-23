@@ -1,5 +1,5 @@
 schema_version: 20180708
-name: tweet-report-processot
-version: 0.0.5
+name: tweet-report-processor
+version: 0.0.9
 runtime: node
 entrypoint: node func.js
