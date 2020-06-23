@@ -1,0 +1,14 @@
+{
+    "region": "US_ASHBURN_1",
+    "timeout": 20000,
+    "ddlTimeout": 40000,
+    "compartment": "lab-compartment",
+    "auth":
+    {
+        "iam":
+        {
+            "configFile": "oci-config",
+            "profileName": "DEFAULT"
+        }
+    }
+}
