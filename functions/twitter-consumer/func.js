@@ -2,7 +2,8 @@ const fdk = require('@fnproject/fdk');
 const tweetConsumer = require('./index')
 const url = require('url');
 fdk.handle(async function (input, ctx) {
-  console.log(`TweetConsumer invoked with body ${JSON.stringify(input)}`)
+  
+  console.log(`TweetConsumer invoked with body ${input?JSON.stringify(input):"geen input"}`)
 
   let requestURL = ctx.headers["Fn-Http-Request-Url"]
   let queryData

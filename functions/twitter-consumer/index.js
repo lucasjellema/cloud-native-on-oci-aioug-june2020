@@ -48,17 +48,14 @@ const queryTweets = async (hashtag, howFarBack) => {
 const bucketName = "tweet-reports"
 
 const produceTweetReport = async function (hashtag, minutes) {
-    const tweets = await queryTweets(hashtag, minutes)
+    const tweets= await queryTweets(hashtag, minutes)
     //console.log(tweets)
     const filename = `tweets-${hashtag}-${new Date().toISOString().substr(0, 19)}.json`  //yyyy-mm-ddThh:mi:ss
 
     // the padEnd is added because it seems bytes are getting lost when creating the file object; spaces are added that can get lost without affecting the JSON content 
     let data = await fileWriter.fileWriter(bucketName, filename, JSON.stringify({"tweets": tweets})+" ".padEnd(550))
-   // console.log(`response from file writer: ${JSON.stringify(data)}`)
-    // to test the result of what we just did: read the file that was created
-    const file =await  fileReader.fileReader(bucketName, filename) 
-    const tweetsFile = JSON.parse(file)
-    return {"NumberOfTweetsProcessed" : tweetsFile.tweets.length, "filename":filename}
+   // console.log(`response from file writer: ${JSON.stringify(data)}`)    
+    return {"NumberOfTweetsProcessed" : tweets.length, "filename":filename}
 }
 
 
