@@ -25,9 +25,28 @@ function signRequest(request, body = "") {
     }, body);
 }
 
+
+const persistTweetsInNOSQL = async function (tweetsReport) {
+    // loop over all tweets
+    for (let i = 0; i < tweetsReport.tweets.length; i++) {
+        tweet = tweetsReport.tweets[i]
+        try {
+            // insert record into NoSQL Database table 
+            let result = await nosqlClient.put(tableName, {
+                "id": tweet.id, "text": tweet.tweetText,
+                "author": tweet.author, "tweet_timestamp": tweet.creationTime
+                , "language": tweet.lang, "hashtags": tweet.hashtags
+            });
+        } catch (e) {
+            console.log(`Failed to create NoSQL Record ${JSON.stringify(e)}`)
+        }
+
+    }//for
+    return {}
+}//persistTweetsInNOSQL
+
 function encodeString(txt) {
-    return new Buffer(txt?txt:"(empty)").toString('base64')
-  //  return Buffer().from(txt ? txt : "(empty)").toString('base64')
+    return Buffer.from(txt?txt:"(empty)").toString('base64')
 }
 
 // messages is any array of objects with a key and a body property
@@ -72,24 +91,6 @@ const publishTweetsOnStream = async function (streamId, tweetsReport) {
     return streamingReport
 }//publishTweetsOnStream
 
-const persistTweetsInNOSQL = async function (tweetsReport) {
-    // loop over all tweets
-    for (let i = 0; i < tweetsReport.tweets.length; i++) {
-        tweet = tweetsReport.tweets[i]
-        try {
-            // insert record into NoSQL Database table 
-            let result = await nosqlClient.put(tableName, {
-                "id": tweet.id, "text": tweet.tweetText,
-                "author": tweet.author, "tweet_timestamp": tweet.creationTime
-                , "language": tweet.lang, "hashtags": tweet.hashtags
-            });
-        } catch (e) {
-            console.log(`Failed to create NoSQL Record ${JSON.stringify(e)}`)
-        }
-
-    }//for
-    return {}
-}
 
 const streamId = "ocid1.stream.oc1.iad.amaaaaaa6sde7caa2z74vlzm7ssoqd3q6qixbrineq7xxl2luffnvbpffxfa" // lab-stream
 
@@ -98,7 +99,7 @@ const processTweetReport = async function (filename) {
     console.log(`Processing Tweetreport ${filename} in bucket ${bucketName}`)
     const file = await fileReader.fileReader(bucketName, filename)
     const tweetsReport = JSON.parse(file)
-    await persistTweetsInNOSQL(tweetsReport)
+    //await persistTweetsInNOSQL(tweetsReport)
     const streamPublishResult = await publishTweetsOnStream(streamId, tweetsReport);
     return { "NumberOfTweetsProcessed": tweetsReport.tweets.length, "filename": filename }
 }
@@ -126,4 +127,4 @@ module.exports = {
 
 
 
-// node index.js "tweets-Ajax-2020-06-22T09:52:48.json"
+// node index.js "tweets-cricket-2020-06-24T07:28:00.json"
